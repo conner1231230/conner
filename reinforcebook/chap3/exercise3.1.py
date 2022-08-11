@@ -53,7 +53,7 @@ def env_SW(S,A,L,D):
 Q=tempQ
 
 while(times>0):
-    S=So
+    S=So.copy()
     S_queue=np.array([0,0])
     R_queue=np.array([])
     A_queue=np.array([])
