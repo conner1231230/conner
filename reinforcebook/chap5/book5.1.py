@@ -51,7 +51,7 @@ def eps_greedy(Q, S, eps):
 
 #n_step Sarsa
 Q = tempQ
-S = So
+S = So.copy()
 S_queue = []
 R_queue = []
 A_queue = []
