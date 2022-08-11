@@ -50,7 +50,7 @@ def env_SW(S, A, L, D):
 Q = tempQ
 i=3000
 while i>0:
-    S = So
+    S = So.copy()
     A = eps_greedy(Q, S, eps)
     while S != Sg:
         [S_prime, R] = env_SW(S, A, L, D)
