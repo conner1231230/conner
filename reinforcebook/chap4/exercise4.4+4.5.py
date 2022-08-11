@@ -47,10 +47,10 @@ def env_SW(S, A, L, D):
 
 """
 #Sarsa
-Q = tempQ
+Q = tempQ.copy()
 i=300000
 while i>0:
-    S = So
+    S = So.copy()
     A = eps_greedy(Q, S, eps)
     while S != Sg:
         [S_prime, R] = env_SW(S, A, L, D)
@@ -66,10 +66,10 @@ print(Q)
 ansQ=np.zeros((D,L,4))
 times = 100
 while times>0:
-    Q = tempQ
+    Q = tempQ.copy()
     i=500
     while i>0:
-        S = So
+        S = So.copy()
         A = eps_greedy(Q, S, eps)
         while S != Sg:
             [S_prime, R] = env_SW(S, A, L, D)
