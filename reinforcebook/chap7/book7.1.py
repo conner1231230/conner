@@ -102,7 +102,7 @@ for i in range(len(avgsteplist[0])):
     ans.append(temp/5)
 
 x = np.linspace(0,len(ans)-1,len(ans))
-plt.plot(x,ans,label='Normal weight')
+plt.plot(x,ans,label='Dyna-Q')
 
 plt.legend()
 plt.show()
