@@ -1,4 +1,4 @@
-from audioop import avg
+
 import random
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,15 +51,7 @@ def eps_greedy(Q, S, eps):
 
     return A
 
-def find(Model_visit):
-    templist=[]
-    for i in range(D):
-        for j in range(L):
-            for p in range(4):
-                if Model_visit[i][j][p] == 1:
-                    templist.append([i, j ,p])
 
-    return templist
 
 #Dyna-Q
 Q = tempQ.copy()
@@ -87,9 +79,6 @@ while avgtime > 0:
             Model[S[0]][S[1]][A][2] = S_prime[1]
             step += R
             for k in range(n):
-                #find visited state-action pairs
-                #Ind_visit = find(Model_visit)
-                #Ind_select = random.randint(0,len(Ind_visit)-1)
                 while True:
                     tempi = random.randint(0,D-1)
                     tempj = random.randint(0,L-1)
@@ -97,7 +86,6 @@ while avgtime > 0:
                     if Model_visit[tempi][tempj][tempp] == 1:
                         break
                 temp = Model[tempi][tempj][tempp]
-                #temp = Model[Ind_visit[Ind_select][0]][Ind_visit[Ind_select][1]][Ind_visit[Ind_select][2]]
                 R = temp[0]
                 S_double_prime = [int(temp[1]), int(temp[2])]
                 Q[tempi][tempj][tempp] =Q[tempi][tempj][tempp]+ myalpha*(R+np.max(Q[S_double_prime[0]][S_double_prime[1]][:])-Q[tempi][tempj][tempp])
