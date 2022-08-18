@@ -1,4 +1,4 @@
-from audioop import avg
+
 import random
 import numpy as np
 import matplotlib.pyplot as plt
@@ -47,12 +47,12 @@ def env_SW(S, A, L, D):
 
     return [S_prime, R]
 
-"""
+
 #Sarsa
-Q = np.zeros((D, L, 4))
 avgtimes = 40
 avgsteplist = []
 while avgtimes > 0:
+    Q = tempQ.copy()
     i=300
     steplist = []
     while i>0:
@@ -70,20 +70,22 @@ while avgtimes > 0:
         i-=1
     avgsteplist.append(steplist)
     avgtimes -= 1
+    print(avgtimes)
 ans = []
 
 for i in range(len(avgsteplist[0])):
     temp = 0
-    for j in range(10):
+    for j in range(40):
         temp += avgsteplist[j][i]
-    ans.append(temp/10)
+    ans.append(temp/40)
 
-"""
+
 #Q-learning
-Q = np.zeros((D, L, 4))
+
 avgtimes = 40
 avgsteplist = []
 while avgtimes > 0:
+    Q = tempQ.copy()
     i=300
     steplist = []
     while i>0:
@@ -101,17 +103,19 @@ while avgtimes > 0:
         i-=1
     avgsteplist.append(steplist)
     avgtimes -= 1
-ans = []
+    print(avgtimes)
+ans1 = []
 
 for i in range(len(avgsteplist[0])):
     temp = 0
-    for j in range(10):
+    for j in range(40):
         temp += avgsteplist[j][i]
-    ans.append(temp/10)
+    ans1.append(temp/40)
 
-print(ans)
+
 x = np.linspace(0,len(ans)-1,len(ans))
-plt.plot(x,ans,label='Normal weight')
+plt.plot(x,ans,label='Sarsa')
+plt.plot(x,ans1,label='Q-learning')
 
 plt.legend()
 plt.show()
