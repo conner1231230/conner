@@ -1,10 +1,10 @@
 import random
 import numpy as np
-
+import matplotlib.pyplot as plt
 L = 4
 D = 3
-Sg = [2,L-1]
-So = [2,1]
+Sg = [1,L-1]
+So = [1,1]
 
 #parameter setting
 myalpha = 0.1
@@ -26,25 +26,28 @@ def eps_greedy(Q,S,eps):
 #Gridworld Environment
 def env_SW(S,A,L,D):
     #state transition
+    S_prime = S.copy()
     if A == 1 and S[0]-1 >= 0:#up
-        S[0] = S[0]-1
+        S_prime[0] = S[0]-1
     elif A == 2 and S[1]+1 < L:#right
-        S[1] = S[1]+1
+        S_prime[1] = S[1]+1
     elif A == 3 and S[0]+1 < D:#down
-        S[0] = S[0]+1
+        S_prime[0] = S[0]+1
     elif A == 4 and S[1]-1 >= 0:#left
-        S[1] = S[1]-1
+        S_prime[1] = S[1]-1
     #reward setting
-    if S[0] == 1:
+    if S_prime[0] == 1:
         R=-100
     else:
         R=-1
-    return [S,R]
+    return [S_prime,R]
 
-#Monte Carlo Control 
+#Monte Carlo Control
 Q=tempQ
 times=100
+avgRlist = []
 while(times>0):
+    avgR = 0
     S=So.copy()
     S_queue=np.array([0,0])
     R_queue=np.array([])
@@ -56,6 +59,7 @@ while(times>0):
         A_queue = np.append(A_queue,A)
         [S,R] = env_SW(S,A,L,D)
         R_queue = np.append(R_queue,R)
+        avgR += R
 
     T=R_queue.size-1
     G=0
@@ -63,13 +67,10 @@ while(times>0):
     for t in range(T,-1,-1):
         G=R_queue[t]+mygamma*G
         Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]]+=myalpha*(G-Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]])
+    avgRlist.append(avgR)
     times-=1
-print(Q)
-
-
-
-
-
-
-
-
+print(avgRlist)
+x = np.linspace(0,len(avgRlist)-1,len(avgRlist))
+plt.plot(x,avgRlist,label='Normal weight')
+plt.legend()
+plt.show()
