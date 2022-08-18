@@ -43,34 +43,49 @@ def env_SW(S,A,L,D):
     return [S_prime,R]
 
 #Monte Carlo Control
-Q=tempQ
-times=100
-avgRlist = []
-while(times>0):
-    avgR = 0
-    S=So.copy()
-    S_queue=np.array([0,0])
-    R_queue=np.array([])
-    A_queue=np.array([])
+avgsteplist = []
+avgtimes=40
+while avgtimes > 0:
+    Q=tempQ.copy()
+    times=150
+    avgRlist = []
+    while(times>0):
+        avgR = 0
+        S=So.copy()
+        S_queue=np.array([0,0])
+        R_queue=np.array([])
+        A_queue=np.array([])
 
-    while S!=Sg:
-        A=eps_greedy(Q,S,eps)
-        S_queue = np.vstack((S_queue,S))
-        A_queue = np.append(A_queue,A)
-        [S,R] = env_SW(S,A,L,D)
-        R_queue = np.append(R_queue,R)
-        avgR += R
+        while S!=Sg:
+            A=eps_greedy(Q,S,eps)
+            S_queue = np.vstack((S_queue,S))
+            A_queue = np.append(A_queue,A)
+            [S,R] = env_SW(S,A,L,D)
+            R_queue = np.append(R_queue,R)
+            avgR += R
 
-    T=R_queue.size-1
-    G=0
+        T=R_queue.size-1
+        G=0
 
-    for t in range(T,-1,-1):
-        G=R_queue[t]+mygamma*G
-        Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]]+=myalpha*(G-Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]])
-    avgRlist.append(avgR)
-    times-=1
-print(avgRlist)
+        for t in range(T,-1,-1):
+            G=R_queue[t]+mygamma*G
+            Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]]+=myalpha*(G-Q[[int(S_queue[t+1,0])],[int(S_queue[t+1,1])],[int(A_queue[t])]])
+        avgRlist.append(avgR)
+        times-=1
+    avgtimes -= 1
+    print(avgtimes)
+    avgsteplist.append(avgRlist)
+
+ans = []
+for i in range(len(avgsteplist[0])):
+    temp = 0
+    for j in range(40):
+        temp += avgsteplist[j][i]
+    ans.append(temp/40)
+
 x = np.linspace(0,len(avgRlist)-1,len(avgRlist))
-plt.plot(x,avgRlist,label='Normal weight')
+plt.plot(x,avgRlist,label='Monte Carlo Control')
+
 plt.legend()
 plt.show()
+
