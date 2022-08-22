@@ -37,6 +37,7 @@ def featureVEC(S, A, N, p, num_action):
     S1 = Ex6_1_state_normal(S)
     numTilesInTiling = p[0] * p[1]
     tiles = np.zeros(N * numTilesInTiling * num_action)
+    sz = np.array((N,p,num_action),dtype=object)
     L = p[0]/(p[0]-1+(1/N))
     xi = (L-1)/(N-1)
     blocklength = L/p[0]
@@ -44,7 +45,6 @@ def featureVEC(S, A, N, p, num_action):
         tempS = S1 + n *xi
         mysub = np.ceil(tempS/blocklength)
         mysub -= 1
-        sz = np.array((N,p,num_action),dtype=object)
         myind = sub2ind(sz, n, mysub[0], mysub[1], A)
         tiles[int(myind)] = 1
     return tiles
