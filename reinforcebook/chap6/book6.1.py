@@ -40,28 +40,18 @@ def featureVEC(S, A, N, p, num_action):
     L = p[0]/(p[0]-1+(1/N))
     xi = (L-1)/(N-1)
     blocklength = L/p[0]
-    #print("1")
-    #print(L)
-    #print(xi)
-    #print(blocklength)
     for n in range(N):
         tempS = S1 + n *xi
         mysub = np.ceil(tempS/blocklength)
         mysub -= 1
-        #print("||")
-        #print(mysub)
         sz = np.array((N,p,num_action),dtype=object)
         myind = sub2ind(sz, n, mysub[0], mysub[1], A)
-        #myind.astype(int)
-        #print(sz[1])
-        #print(sz[2])
         tiles[int(myind)] = 1
     return tiles
 
 def sub2ind(array_shape, n, rows, cols, A):
-   # print(n, rows, cols, A)
     return (rows*array_shape[0]+n)*array_shape[1][1]*array_shape[2] + ((A+1)*array_shape[1][1]+cols)
-    #return n*array_shape[0] + (rows+1)*array_shape[1][0] + (cols+1)*array_shape[1][1] + (A+2)#*array_shape[2]
+
 
 def Ex6_1_state_normal(S):
     temp = np.array([S[0],S[1]])
@@ -115,8 +105,6 @@ while times>0:
     print(times)
 ans = steplist
 ans1 = avgRlist
-#print(w)
-print(steplist)
 x = np.linspace(0,len(ans)-1,len(ans))
 plt.plot(x,ans,label='Step')
 plt.plot(x,ans1,label='Reward')
