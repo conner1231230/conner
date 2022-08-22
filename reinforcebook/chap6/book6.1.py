@@ -2,6 +2,9 @@
 import numpy as np
 import random
 import sys
+import matplotlib.pyplot as plt
+np.set_printoptions(linewidth=190,threshold=sys.maxsize)
+
 Sg = np.array([0.5, 0])
 num_epi = 200
 
@@ -37,16 +40,28 @@ def featureVEC(S, A, N, p, num_action):
     L = p[0]/(p[0]-1+(1/N))
     xi = (L-1)/(N-1)
     blocklength = L/p[0]
+    #print("1")
+    #print(L)
+    #print(xi)
+    #print(blocklength)
     for n in range(N):
         tempS = S1 + n *xi
         mysub = np.ceil(tempS/blocklength)
+        mysub -= 1
+        #print("||")
+        #print(mysub)
         sz = np.array((N,p,num_action),dtype=object)
         myind = sub2ind(sz, n, mysub[0], mysub[1], A)
-        tiles[myind.astype(int)] = 1
+        #myind.astype(int)
+        #print(sz[1])
+        #print(sz[2])
+        tiles[int(myind)] = 1
     return tiles
 
-def sub2ind(array_shape,n, rows, cols, A):
-    return n + (rows-1)*array_shape[0] + (cols-1)*array_shape[1] + (A+1)*array_shape[2]
+def sub2ind(array_shape, n, rows, cols, A):
+   # print(n, rows, cols, A)
+    return (rows*array_shape[0]+n)*array_shape[1][1]*array_shape[2] + ((A+1)*array_shape[1][1]+cols)
+    #return n*array_shape[0] + (rows+1)*array_shape[1][0] + (cols+1)*array_shape[1][1] + (A+2)#*array_shape[2]
 
 def Ex6_1_state_normal(S):
     temp = np.array([S[0],S[1]])
@@ -73,12 +88,15 @@ def env_Ex6_1(S, A):
 #Episodic Semi-gradient Sarsa
 times = 200
 steplist = []
+avgRlist = []
 while times>0:
     step = 0
+    avgR = 0
     S = np.array([random.random()*0.2-0.7, 0])
     A = EX6_1_eps_greedy(w, S, eps, N, p, K)
     while S[0] != Sg[0]:
         [S_prime, R] = env_Ex6_1(S, A)
+        avgR += R
         feaVec_S = featureVEC(S, A, N, p, K)
         OldEst = w.dot(feaVec_S)
         if S[0]==Sg[0]:
@@ -91,9 +109,16 @@ while times>0:
             step += 1
         S = S_prime
         A = A_prime
+    avgRlist.append(avgR)
     steplist.append(step)
     times -= 1
-
-#np.set_printoptions(linewidth=190,threshold=sys.maxsize)
+    print(times)
+ans = steplist
+ans1 = avgRlist
 #print(w)
 print(steplist)
+x = np.linspace(0,len(ans)-1,len(ans))
+plt.plot(x,ans,label='Step')
+plt.plot(x,ans1,label='Reward')
+plt.legend()
+plt.show()
