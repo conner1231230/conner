@@ -88,7 +88,7 @@ for time in range(times):
             feaVec_S = featurState(S, N, p)
             feaVec_S_copy = feaVec_S.copy()
             mu = np.dot(theta_mu, feaVec_S_copy)
-            A = random.gauss(0, sig)+mu
+            A = random.gauss(mu, sig)
             [S_prime, R] = env_Ex9_1(S, A, del_t)
             OldEst = np.dot(w, feaVec_S_copy)
             if R == 0:
