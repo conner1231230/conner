@@ -4,7 +4,7 @@ import scipy.linalg as sp
 import matplotlib.pyplot as plt
 import random
 #environment setting
-num_epi = 300
+num_epi = 800
 
 
 #parameter setting
