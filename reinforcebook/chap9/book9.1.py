@@ -58,8 +58,7 @@ def featurState(S, N, p):
     blocklength = L/p[0]
     for n in range(N):
         tempS = S_copy1 + n *xi
-        mysub = np.ceil(tempS/blocklength)
-        mysub -= 1
+        mysub = np.floor(tempS/blocklength)
         myind = sub2ind(sz, n, mysub[0][0], mysub[0][1])
         tiles[int(myind)] = 1
 
